@@ -7,26 +7,31 @@ import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 import Company from './components/company/company'
 import Project from './components/project/project'
-const routing = (
-  <Router>
-    <div>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/companies">companies</Link>
-        </li>
-        <li>
-          <Link to="/projects">Project</Link>
-        </li>
-      </ul>
 
-      <Route exact path="/" component={App}></Route>
-      <Route path="/companies" component={Company}></Route>
-      <Route path="/projects" component={Project}></Route>
-    </div>
-  </Router>
+import store from './redux/store.js'
+import { Provider } from 'react-redux'
+const routing = (
+  <Provider store={store}>
+    <Router>
+      <div>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/companies">companies</Link>
+          </li>
+          <li>
+            <Link to="/projects">Project</Link>
+          </li>
+        </ul>
+
+        <Route exact path="/" component={App}></Route>
+        <Route path="/companies" component={Company}></Route>
+        <Route path="/projects" component={Project}></Route>
+      </div>
+    </Router>
+    </Provider>
 )
 
 ReactDOM.render(routing, document.getElementById('root'));

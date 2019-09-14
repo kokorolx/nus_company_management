@@ -1,6 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import axios from '../../configs/axios';
-import { PROJECTS_URL } from '../../configs/RequestURL.js'
+import { fetchProjects } from '../../requests/requests_projects.js'
+import { getProjects } from '../../redux/actions/actions_project.js'
+
 
 class Project extends React.Component {
 
@@ -12,22 +15,13 @@ class Project extends React.Component {
     }
   }
 
-  componentDidMount(){
-    axios.get(PROJECTS_URL).then(
-      response => {
-        console.log(response.data)
-        if(response.data.length) {
-          this.setState({projects: response.data})
-        }
-      },
-      error => {
-        console.log(error)
-      }
-    )
+  async componentDidMount(){
+    const projects = await fetchProjects()
+    this.props.getProjects(projects)
   }
 
   projectRow() {
-    return this.state.projects.map((project, index) => {
+    return this.props.projects.items.map((project, index) => {
       return (
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
@@ -40,8 +34,6 @@ class Project extends React.Component {
   }
 
   render() {
-    let projects = this.state.projects
-
     return(
       <table className="table table-hover">
         <thead className='thead-dark'>
@@ -59,4 +51,12 @@ class Project extends React.Component {
   }
 }
 
-export default Project;
+const mapStateToProps = state => ({
+  projects: state.projects
+})
+
+const mapDispatchToProps = {
+  getProjects
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Project);
