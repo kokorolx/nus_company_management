@@ -4,7 +4,6 @@ const initialState = { items: [{company_id: null, id: null, name: null, users: [
 
 
 const projects = (state = initialState, action) => {
-  console.log(action)
   switch (action.type) {
     case GET_PROJECTS:
       return {

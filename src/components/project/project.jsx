@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import axios from '../../configs/axios';
 import { fetchProjects } from '../../requests/requests_projects.js'
 import { getProjects } from '../../redux/actions/actions_project.js'
 
