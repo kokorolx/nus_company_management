@@ -3,25 +3,30 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
-import Company from './components/company/company'
-import Project from './components/project/project'
+import Company from './components/company/company';
+import Project from './components/project/project';
 
-import store from './redux/store.js'
-import { Provider } from 'react-redux'
+import store from './redux/store.js';
+import { Provider } from 'react-redux';
+import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.css';
+
 const routing = (
   <Provider store={store}>
     <Router>
-      <div>
-        <ul>
-          <li>
+
+      <div className="container">
+        <img src={logo} className="App-logo" alt="logo" />
+        <ul className="nav nav-inline">
+          <li className="pl-1">
             <Link to="/">Home</Link>
           </li>
-          <li>
+          <li className="pl-1">
             <Link to="/companies">companies</Link>
           </li>
-          <li>
+          <li className="pl-1">
             <Link to="/projects">Project</Link>
           </li>
         </ul>

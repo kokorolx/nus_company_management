@@ -1,8 +1,8 @@
-export const GET_PROJECTS = 'GET_PROJECTS'
+export const REFRESH_PROJECTS = 'REFRESH_PROJECTS'
 
-export function getProjects(projects){
+export function refreshProjects(projects){
   return {
-    type: GET_PROJECTS,
+    type: REFRESH_PROJECTS,
     payload: {
       projects
     }
