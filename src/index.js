@@ -5,8 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
-import Company from './components/company/index'
-import Project from './components/project/index'
+import Company from './components/company/company'
+import Project from './components/project/project'
 const routing = (
   <Router>
     <div>
