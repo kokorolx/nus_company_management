@@ -4,12 +4,7 @@ import CommnonTableDetails from '../common/common_table_details.jsx'
 import { fetchProject } from '../../redux/actions/actions_project.js'
 
 class ProjectDetails extends React.Component {
-
-  constructor(props) {
-    super(props)
-  }
-
-  async componentDidMount(){
+  componentDidMount(){
     const { id } = this.props.match.params
     this.props.fetchProject(id)
   }

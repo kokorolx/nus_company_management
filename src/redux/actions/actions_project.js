@@ -6,6 +6,7 @@ export const PROJECT_ACTIONS = {
   REFRESH_PROJECTS: 'REFRESH_PROJECTS',
   UPDATE_PROJECT_DETAILS: 'UPDATE_PROJECT_DETAILS',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
+  ADD_NEW_PROJECT: 'ADD_NEW_PROJECT',
 }
 
 export function refreshProjects(projects){
@@ -35,6 +36,15 @@ export function removeProject(projectId){
   }
 }
 
+export function addProject(project) {
+  return {
+    type: PROJECT_ACTIONS.ADD_NEW_PROJECT,
+    payload: {
+      project
+    }
+  }
+}
+
 export const deleteProject = (projectId) => {
   return (dispatch) => {
     return axios.delete(`${PROJECTS_URL}/${projectId}`).then(
@@ -43,6 +53,19 @@ export const deleteProject = (projectId) => {
       },
       error => {
         alert('There is an issue when delete this project!')
+      }
+    )
+  }
+}
+
+export const addNewProject = (project) => {
+  return (dispatch) => {
+    return axios.post(PROJECTS_URL, { project }).then(
+      response => {
+        dispatch(addProject(response.data))
+      },
+      error => {
+        alert(error)
       }
     )
   }

@@ -19,6 +19,11 @@ const projects = (state = initialState, action) => {
         ...state,
         items: state.items.filter(item => item.id !== action.payload.projectId)
       }
+    case PROJECT_ACTIONS.ADD_NEW_PROJECT:
+      return {
+        ...state,
+        items: state.items.concat(action.payload.project)
+      }
     default:
     return initialState
   }

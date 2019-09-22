@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux'
-import { fetchProjects, deleteProject } from '../../redux/actions/actions_project.js'
+import { fetchProjects, deleteProject, addNewProject } from '../../redux/actions/actions_project.js'
 import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import CommonModal from '../common/modal'
+import FormProject from './_form_project.jsx'
 
 const ACTION_TYPE = {
   AddProject: 'AddProject',
@@ -30,7 +31,8 @@ class Project extends React.Component {
   }
 
   handleAddNew(project){
-    console.log('confirm add new', project)
+    this.props.addNewProject(project)
+    this.toggle(ACTION_TYPE.AddProject)
   }
 
   handleEdit(project){
@@ -38,22 +40,17 @@ class Project extends React.Component {
   }
 
   handleOpenDeleteModal(project){
-    this.toggle('DeleteProject')
+    this.toggle(ACTION_TYPE.DeleteProject)
     this.setState({selectedProject: project})
   }
 
   confirmDelete(){
     this.props.deleteProject(this.state.selectedProject.id)
-    this.toggle('DeleteProject')
+    this.toggle(ACTION_TYPE.DeleteProject)
   }
 
   handleCancle(type) {
-    this.setState((state) => {
-      return {
-        ...state,
-        [`isOpen${type}Modal`]: !this.state[`isOpen${type}Modal`]
-      }
-    })
+    this.toggle(type)
   }
 
   toggle(type) {
@@ -105,6 +102,11 @@ class Project extends React.Component {
             toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
             modalTitle="Create new project"
             isOpen={this.state.isOpenAddProjectModal}>
+
+            <FormProject
+              initialValues={{name: ''}}
+              onSubmit={this.handleAddNew}
+            />
           </CommonModal>
         }
         {this.state.isOpenEditProjectModal &&
@@ -124,7 +126,7 @@ class Project extends React.Component {
             handleCancle={this.handleCancle.bind(this, ACTION_TYPE.DeleteProject)}
             isOpen={this.state.isOpenDeleteProjectModal}>
             <div>
-              Delete this project?
+              Delete <b>{this.state.selectedProject.name} </b> project?
             </div>
           </CommonModal>
         }
@@ -140,6 +142,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   fetchProjects,
   deleteProject,
+  addNewProject,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

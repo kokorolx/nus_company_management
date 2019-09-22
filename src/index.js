@@ -5,13 +5,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
-import Company from './components/company/company';
 import Project from './components/project/project';
 import ProjectDetails from './components/project/project_details';
 
 import store from './redux/store.js';
 import { Provider } from 'react-redux';
-import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const routing = (
@@ -32,7 +30,6 @@ const routing = (
         </ul>
 
         <Route exact path="/" component={App}></Route>
-        {/*<Route path="/companies" component={Company}></Route>*/}
         <Route exact path="/projects" component={Project}></Route>
         <Route exact path="/projects/:id" component={ProjectDetails}></Route>
       </div>
