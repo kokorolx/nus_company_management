@@ -1,7 +1,6 @@
 import { PROJECTS_URL } from '../../configs/request_urls.js'
 import axios from '../../configs/axios'
 
-
 export const PROJECT_ACTIONS = {
   REFRESH_PROJECTS: 'REFRESH_PROJECTS',
   FETCH_PROJECT: 'FETCH_PROJECT',

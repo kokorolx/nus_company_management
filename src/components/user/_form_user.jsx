@@ -2,7 +2,7 @@ import React from 'react';
 import { Input } from 'reactstrap'
 import { Formik, Field } from 'formik';
 
-class FormProject extends React.Component {
+class FormUser extends React.Component {
 
   render() {
     return (
@@ -25,4 +25,4 @@ class FormProject extends React.Component {
   }
 }
 
-export default FormProject;
+export default FormUser;

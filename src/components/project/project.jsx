@@ -30,6 +30,9 @@ class Project extends React.Component {
     this.confirmDelete = this.confirmDelete.bind(this);
   }
 
+  componentDidMount(){
+    this.props.fetchProjects()
+  }
   handleAddNew(project){
     this.props.addNewProject(project)
     this.toggle(ACTION_TYPE.AddProject)
@@ -50,10 +53,6 @@ class Project extends React.Component {
     this.toggle(ACTION_TYPE.DeleteProject)
   }
 
-  handleCancle(type) {
-    this.toggle(type)
-  }
-
   toggle(type) {
     this.setState((state) => {
       return {
@@ -61,10 +60,6 @@ class Project extends React.Component {
         [`isOpen${type}Modal`]: !this.state[`isOpen${type}Modal`]
       }
     })
-  }
-
-  componentDidMount(){
-    this.props.fetchProjects()
   }
 
   projectRow(projects) {
@@ -90,7 +85,7 @@ class Project extends React.Component {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Project Name</th>
-              <th scope="col" colspan='2'>Handle</th>
+              <th scope="col" colSpan='2'>Handle</th>
             </tr>
           </thead>
           { !!projects.length &&
@@ -105,10 +100,13 @@ class Project extends React.Component {
           <CommonModal
             toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
             modalTitle="Create new project"
+            activeFotterModal={true}
+            handleCancle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
             isOpen={this.state.isOpenAddProjectModal}>
             <FormProject
               initialValues={{name: ''}}
               onSubmit={this.handleAddNew}
+              submitText='Save'
             />
           </CommonModal>
         }
@@ -116,10 +114,13 @@ class Project extends React.Component {
           <CommonModal
             toggle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
             modalTitle="Edit project"
+            activeFotterModal={true}
+            handleCancle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
             isOpen={this.state.isOpenEditProjectModal}>
             <FormProject
               initialValues={this.state.selectedProject}
               onSubmit={this.handleEdit}
+              submitText='Save'
             />
           </CommonModal>
         }

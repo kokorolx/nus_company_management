@@ -6,6 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
 import Project from './components/project/project';
+import User from './components/user/user';
 import ProjectDetails from './components/project/project_details';
 
 import store from './redux/store.js';
@@ -24,10 +25,14 @@ const routing = (
           <li className="pl-1">
             <Link to="/projects">Project</Link>
           </li>
+          <li className="pl-1">
+            <Link to="/users">User</Link>
+          </li>
         </ul>
 
         <Route exact path="/" component={App}></Route>
         <Route exact path="/projects" component={Project}></Route>
+        <Route exact path="/users" component={User}></Route>
         <Route exact path="/projects/:id" component={ProjectDetails}></Route>
       </div>
     </Router>

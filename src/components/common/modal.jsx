@@ -12,7 +12,7 @@ export default class CommonModal extends React.Component {
         </ModalBody>
         {this.props.activeFotterModal &&
           <ModalFooter>
-            <Button color="primary" onClick={this.props.handleConfirm}>{this.props.confirmText || 'Do Something'}</Button>
+            {this.props.confirmText && <Button color="primary" onClick={this.props.handleConfirm}>{this.props.confirmText}</Button>}
             <Button color="secondary" onClick={this.props.handleCancle} >{this.props.cancelText || 'Cancel'}</Button>
           </ModalFooter>
         }
