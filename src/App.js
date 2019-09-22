@@ -7,6 +7,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
+          Welcome to TamLH's
+          <br />
+          Company Management System
           <img src={logo} className="App-logo" alt="logo" />
         </header>
       </div>

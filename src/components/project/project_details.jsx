@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import CommnonTableDetails from '../common/common_table_details.jsx'
-import { fetchProject } from '../../requests/requests_projects.js'
-import { updateProjectDetails } from '../../redux/actions/actions_project.js'
+import { fetchProject } from '../../redux/actions/actions_project.js'
 
 class ProjectDetails extends React.Component {
 
@@ -12,15 +11,14 @@ class ProjectDetails extends React.Component {
 
   async componentDidMount(){
     const { id } = this.props.match.params
-    const project = await fetchProject(id)
-    this.props.updateProjectDetails(project)
+    this.props.fetchProject(id)
   }
 
   render() {
     return (
       <div className='wrapper project_details'>
         <CommnonTableDetails
-          object={this.props.project}
+          object={this.props.currentProject}
         />
       </div>
     )
@@ -28,11 +26,11 @@ class ProjectDetails extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  project: state.projects.projectDetails
+  currentProject: state.projects.currentProject
 })
 
 const mapDispatchToProps = {
-  updateProjectDetails
+  fetchProject
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectDetails);

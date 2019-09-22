@@ -1,10 +1,15 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux'
-import { fetchProjects } from '../../requests/requests_projects.js'
-import { refreshProjects } from '../../redux/actions/actions_project.js'
+import { fetchProjects, deleteProject } from '../../redux/actions/actions_project.js'
 import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import CommonModal from '../common/modal'
+
+const ACTION_TYPE = {
+  AddProject: 'AddProject',
+  EditProject: 'EditProject',
+  DeleteProject: 'DeleteProject',
+}
 
 class Project extends React.Component {
 
@@ -21,7 +26,7 @@ class Project extends React.Component {
 
     this.handleAddNew = this.handleAddNew.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
   }
 
   handleAddNew(project){
@@ -32,8 +37,23 @@ class Project extends React.Component {
     console.log('confirm edit', project)
   }
 
-  handleDelete(project){
-    console.log('confirm delete', project)
+  handleOpenDeleteModal(project){
+    this.toggle('DeleteProject')
+    this.setState({selectedProject: project})
+  }
+
+  confirmDelete(){
+    this.props.deleteProject(this.state.selectedProject.id)
+    this.toggle('DeleteProject')
+  }
+
+  handleCancle(type) {
+    this.setState((state) => {
+      return {
+        ...state,
+        [`isOpen${type}Modal`]: !this.state[`isOpen${type}Modal`]
+      }
+    })
   }
 
   toggle(type) {
@@ -46,8 +66,7 @@ class Project extends React.Component {
   }
 
   async componentDidMount(){
-    const projects = await fetchProjects()
-    this.props.refreshProjects(projects)
+    this.props.fetchProjects()
   }
 
   projectRow() {
@@ -56,8 +75,8 @@ class Project extends React.Component {
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
           <td><Link to={`/projects/${ project.id }`}>{ project.name }</Link></td>
-          <td onClick={this.toggle.bind(this, 'EditProject')}>Edit</td>
-          <td onClick={this.toggle.bind(this, 'DeleteProject')}>Delete</td>
+          <td onClick={this.toggle.bind(this, ACTION_TYPE.EditProject)}>Edit</td>
+          <td onClick={this.handleOpenDeleteModal.bind(this, project)}>Delete</td>
         </tr>
       )
     })
@@ -66,7 +85,7 @@ class Project extends React.Component {
   render() {
     return(
       <Fragment>
-        <Button onClick={this.toggle.bind(this, 'AddProject')}> Add new projects</Button>
+        <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddProject)}> Add new projects</Button>
         <Table hover striped>
           <thead>
             <tr>
@@ -83,23 +102,30 @@ class Project extends React.Component {
 
         {this.state.isOpenAddProjectModal &&
           <CommonModal
-            toggle={this.toggle.bind(this, 'AddProject')}
+            toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
             modalTitle="Create new project"
             isOpen={this.state.isOpenAddProjectModal}>
           </CommonModal>
         }
         {this.state.isOpenEditProjectModal &&
           <CommonModal
-            toggle={this.toggle.bind(this, 'EditProject')}
+            toggle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
             modalTitle="Edit project"
             isOpen={this.state.isOpenEditProjectModal}>
           </CommonModal>
         }
         {this.state.isOpenDeleteProjectModal &&
           <CommonModal
-            toggle={this.toggle.bind(this, 'DeleteProject')}
-            modalTitle="Delete project"
+            toggle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
+            modalTitle='Delete project'
+            activeFotterModal={true}
+            confirmText='Delete'
+            handleConfirm={this.confirmDelete}
+            handleCancle={this.handleCancle.bind(this, ACTION_TYPE.DeleteProject)}
             isOpen={this.state.isOpenDeleteProjectModal}>
+            <div>
+              Delete this project?
+            </div>
           </CommonModal>
         }
       </Fragment>
@@ -112,7 +138,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = {
-  refreshProjects,
+  fetchProjects,
+  deleteProject,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);

@@ -32,7 +32,7 @@ const routing = (
         </ul>
 
         <Route exact path="/" component={App}></Route>
-        <Route path="/companies" component={Company}></Route>
+        {/*<Route path="/companies" component={Company}></Route>*/}
         <Route exact path="/projects" component={Project}></Route>
         <Route exact path="/projects/:id" component={ProjectDetails}></Route>
       </div>

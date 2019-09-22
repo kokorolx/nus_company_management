@@ -1,6 +1,6 @@
 import { PROJECT_ACTIONS } from '../actions/actions_project.js'
 
-const initialState = { items: [{company_id: null, id: null, name: null, users: []}], projectDetails: {} }
+const initialState = { items: [{company_id: null, id: null, name: null, users: []}], currentProject: {} }
 
 const projects = (state = initialState, action) => {
   switch (action.type) {
@@ -12,7 +12,12 @@ const projects = (state = initialState, action) => {
     case PROJECT_ACTIONS.UPDATE_PROJECT_DETAILS:
       return {
         ...state,
-        projectDetails: action.payload.project
+        currentProject: action.payload.currentProject
+      }
+    case PROJECT_ACTIONS.REMOVE_PROJECT:
+      return {
+        ...state,
+        items: state.items.filter(item => item.id !== action.payload.projectId)
       }
     default:
     return initialState
