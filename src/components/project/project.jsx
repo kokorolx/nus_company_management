@@ -67,8 +67,8 @@ class Project extends React.Component {
     this.props.fetchProjects()
   }
 
-  projectRow() {
-    return this.props.projects.items.map((project, index) => {
+  projectRow(projects) {
+    return projects.map((project, index) => {
       return (
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
@@ -81,6 +81,7 @@ class Project extends React.Component {
   }
 
   render() {
+    const projects = this.props.projects.items
     return(
       <Fragment>
         <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddProject)}> Add new projects</Button>
@@ -89,21 +90,22 @@ class Project extends React.Component {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Project Name</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col" colspan='2'>Handle</th>
             </tr>
           </thead>
-          <tbody>
-            { this.projectRow() }
-          </tbody>
+          { !!projects.length &&
+            <tbody>
+              { this.projectRow(projects) }
+            </tbody>
+          }
         </Table>
+        { !projects.length && <div className="text-center"> Please add new project </div> }
 
         {this.state.isOpenAddProjectModal &&
           <CommonModal
             toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
             modalTitle="Create new project"
             isOpen={this.state.isOpenAddProjectModal}>
-
             <FormProject
               initialValues={{name: ''}}
               onSubmit={this.handleAddNew}
@@ -128,7 +130,7 @@ class Project extends React.Component {
             activeFotterModal={true}
             confirmText='Delete'
             handleConfirm={this.confirmDelete}
-            handleCancle={this.handleCancle.bind(this, ACTION_TYPE.DeleteProject)}
+            handleCancle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
             isOpen={this.state.isOpenDeleteProjectModal}>
             <div>
               Delete <b>{this.state.selectedProject.name} </b> project?
