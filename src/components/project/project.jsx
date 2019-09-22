@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { fetchProjects } from '../../requests/requests_projects.js'
 import { refreshProjects } from '../../redux/actions/actions_project.js'
 import { Table, Button } from 'reactstrap';
-import CreateProjectModal from './create_project_modal.jsx'
-import EditProjectModal from './edit_project_modal.jsx'
+import { Link } from 'react-router-dom'
+import CommonModal from '../common/modal'
 
 class Project extends React.Component {
 
@@ -19,13 +19,9 @@ class Project extends React.Component {
       isOpenDeleteProjectModal: false,
     }
 
-    this.toggleAddNewModal = this.toggleAddNewModal.bind(this);
-    this.toggleEditModal = this.toggleEditModal.bind(this)
-    this.toggleDeleteModal = this.toggleDeleteModal.bind(this)
-
-    this.handleAddNew = this.handleAddNew.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
+    this.handleAddNew = this.handleAddNew.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleAddNew(project){
@@ -34,37 +30,17 @@ class Project extends React.Component {
 
   handleEdit(project){
     console.log('confirm edit', project)
-    let projects = this.props.projects.items
   }
 
   handleDelete(project){
     console.log('confirm delete', project)
   }
 
-  toggleAddNewModal(){
+  toggle(type) {
     this.setState((state) => {
       return {
         ...state,
-        isOpenAddProjectModal: !state.isOpenAddProjectModal,
-      }
-    })
-  }
-
-  toggleEditModal(project) {
-    this.setState((state) => {
-      return {
-        ...state,
-        isOpenEditProjectModal: !state.isOpenEditProjectModal,
-        selectedProject: project
-      }
-    })
-  }
-
-  toggleDeleteModal() {
-    this.setState((state) => {
-      return {
-        ...state,
-        isOpenDeleteProjectModal: !state.isOpenDeleteProjectModal
+        [`isOpen${type}Modal`]: !this.state[`isOpen${type}Modal`]
       }
     })
   }
@@ -79,9 +55,9 @@ class Project extends React.Component {
       return (
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
-          <td>{ project.name }</td>
-          <td onClick={(e) => this.toggleEditModal(project)}>Edit</td>
-          <td onClick={(e) => this.toggleDeleteModal(project)}>Delete</td>
+          <td><Link to={`/projects/${ project.id }`}>{ project.name }</Link></td>
+          <td onClick={this.toggle.bind(this, 'EditProject')}>Edit</td>
+          <td onClick={this.toggle.bind(this, 'DeleteProject')}>Delete</td>
         </tr>
       )
     })
@@ -90,7 +66,7 @@ class Project extends React.Component {
   render() {
     return(
       <Fragment>
-        <Button onClick={this.toggleAddNewModal}> Add new projects</Button>
+        <Button onClick={this.toggle.bind(this, 'AddProject')}> Add new projects</Button>
         <Table hover striped>
           <thead>
             <tr>
@@ -106,26 +82,25 @@ class Project extends React.Component {
         </Table>
 
         {this.state.isOpenAddProjectModal &&
-          <CreateProjectModal
-            handleConfirm={this.handleAddNew}
-            handleCancle={this.toggleAddNewModal}
-            isOpen={this.state.isOpenAddProjectModal}
-            toggle={this.toggleAddNewModal}/>
+          <CommonModal
+            toggle={this.toggle.bind(this, 'AddProject')}
+            modalTitle="Create new project"
+            isOpen={this.state.isOpenAddProjectModal}>
+          </CommonModal>
         }
         {this.state.isOpenEditProjectModal &&
-          <EditProjectModal
-            handleConfirm={this.handleEdit}
-            handleCancle={this.toggleEditModal}
-            selectedProject={this.state.selectedProject}
-            isOpen={this.state.isOpenEditProjectModal}
-            toggle={this.toggleEditModal}/>
+          <CommonModal
+            toggle={this.toggle.bind(this, 'EditProject')}
+            modalTitle="Edit project"
+            isOpen={this.state.isOpenEditProjectModal}>
+          </CommonModal>
         }
         {this.state.isOpenDeleteProjectModal &&
-          <CreateProjectModal
-            handleConfirm={this.handleDelete}
-            handleCancle={this.toggleDeleteModal}
-            isOpen={this.state.isOpenDeleteProjectModal}
-            toggle={this.toggleDeleteModal}/>
+          <CommonModal
+            toggle={this.toggle.bind(this, 'DeleteProject')}
+            modalTitle="Delete project"
+            isOpen={this.state.isOpenDeleteProjectModal}>
+          </CommonModal>
         }
       </Fragment>
     )

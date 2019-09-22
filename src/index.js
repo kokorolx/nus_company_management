@@ -7,6 +7,7 @@ import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
 import Company from './components/company/company';
 import Project from './components/project/project';
+import ProjectDetails from './components/project/project_details';
 
 import store from './redux/store.js';
 import { Provider } from 'react-redux';
@@ -18,13 +19,12 @@ const routing = (
     <Router>
 
       <div className="container">
-        <img src={logo} className="App-logo" alt="logo" />
         <ul className="nav nav-inline">
           <li className="pl-1">
             <Link to="/">Home</Link>
           </li>
           <li className="pl-1">
-            <Link to="/companies">companies</Link>
+            <Link to="/companies">Companies</Link>
           </li>
           <li className="pl-1">
             <Link to="/projects">Project</Link>
@@ -33,7 +33,8 @@ const routing = (
 
         <Route exact path="/" component={App}></Route>
         <Route path="/companies" component={Company}></Route>
-        <Route path="/projects" component={Project}></Route>
+        <Route exact path="/projects" component={Project}></Route>
+        <Route exact path="/projects/:id" component={ProjectDetails}></Route>
       </div>
     </Router>
     </Provider>

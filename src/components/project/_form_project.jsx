@@ -1,7 +1,6 @@
 import React from 'react';
-import { Form } from 'reactstrap'
-
 import { Input } from 'reactstrap'
+
 class FormProject extends React.Component {
 
   render() {
@@ -10,12 +9,10 @@ class FormProject extends React.Component {
       project = this.props.project
     }
     return (
-      <Form>
-        <Input
-          onChange={this.props.onChange}
-          name='project[name]'
-          value={project.name}/>
-      </Form>
+      <Input
+        onChange={this.props.onChange}
+        name='project[name]'
+        value={project.name}/>
     )
   }
 }
