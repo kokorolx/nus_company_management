@@ -22,9 +22,6 @@ const routing = (
             <Link to="/">Home</Link>
           </li>
           <li className="pl-1">
-            <Link to="/companies">Companies</Link>
-          </li>
-          <li className="pl-1">
             <Link to="/projects">Project</Link>
           </li>
         </ul>

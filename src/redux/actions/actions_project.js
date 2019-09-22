@@ -4,9 +4,10 @@ import axios from '../../configs/axios'
 
 export const PROJECT_ACTIONS = {
   REFRESH_PROJECTS: 'REFRESH_PROJECTS',
-  UPDATE_PROJECT_DETAILS: 'UPDATE_PROJECT_DETAILS',
+  FETCH_PROJECT: 'FETCH_PROJECT',
   REMOVE_PROJECT: 'REMOVE_PROJECT',
   ADD_NEW_PROJECT: 'ADD_NEW_PROJECT',
+  UPDATE_PROJECT: 'UPDATE_PROJECT',
 }
 
 export function refreshProjects(projects){
@@ -20,9 +21,18 @@ export function refreshProjects(projects){
 
 export function updateProjectDetails(project){
   return {
-    type: PROJECT_ACTIONS.UPDATE_PROJECT_DETAILS,
+    type: PROJECT_ACTIONS.FETCH_PROJECT,
     payload: {
       currentProject: project
+    }
+  }
+}
+
+export function updateProject(project){
+  return {
+    type: PROJECT_ACTIONS.UPDATE_PROJECT,
+    payload: {
+      project
     }
   }
 }
@@ -97,4 +107,15 @@ export const fetchProject = (projectId) => {
   }
 }
 
-
+export const updateProjectInformations = (project) => {
+  return (dispatch) => {
+    return axios.put(`${PROJECTS_URL}/${project.id}`, { project }).then(
+      response => {
+        dispatch(updateProject(response.data))
+      },
+      error => {
+        alert('There is an issue when update projects')
+      }
+    )
+  }
+}

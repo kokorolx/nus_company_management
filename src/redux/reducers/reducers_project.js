@@ -9,7 +9,7 @@ const projects = (state = initialState, action) => {
         ...state,
         items: action.payload.projects
       }
-    case PROJECT_ACTIONS.UPDATE_PROJECT_DETAILS:
+    case PROJECT_ACTIONS.FETCH_PROJECT:
       return {
         ...state,
         currentProject: action.payload.currentProject
@@ -23,6 +23,13 @@ const projects = (state = initialState, action) => {
       return {
         ...state,
         items: state.items.concat(action.payload.project)
+      }
+    case PROJECT_ACTIONS.UPDATE_PROJECT:
+      return {
+        ...state,
+        items: state.items.map(item => {
+          return item.id == action.payload.project.id ? action.payload.project : item
+        })
       }
     default:
     return initialState

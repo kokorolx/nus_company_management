@@ -5,13 +5,9 @@ import { Formik, Field } from 'formik';
 class FormProject extends React.Component {
 
   render() {
-    let project = {}
-    if (this.props.type === 'edit_project'){
-      project = this.props.project
-    }
     return (
       <Formik
-        initialValues={{ name: '' }}
+        initialValues={this.props.initialValues}
         onSubmit={(values, actions) => {
           setTimeout(() => {
             this.props.onSubmit(values);
@@ -20,7 +16,7 @@ class FormProject extends React.Component {
         }}
         render={(props: FormikProps<Values>) => (
           <form onSubmit={props.handleSubmit}>
-            <Field type="name" name="name" placeholder="Name" />
+            <Field type="text" name="name" placeholder="Name" />
             <button type="submit">Submit</button>
           </form>
         )}

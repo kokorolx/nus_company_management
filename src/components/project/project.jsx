@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux'
-import { fetchProjects, deleteProject, addNewProject } from '../../redux/actions/actions_project.js'
+import { fetchProjects, deleteProject, addNewProject, updateProjectInformations } from '../../redux/actions/actions_project.js'
 import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import CommonModal from '../common/modal'
@@ -36,11 +36,12 @@ class Project extends React.Component {
   }
 
   handleEdit(project){
-    console.log('confirm edit', project)
+    this.props.updateProjectInformations(project)
+    this.toggle(ACTION_TYPE.EditProject)
   }
 
-  handleOpenDeleteModal(project){
-    this.toggle(ACTION_TYPE.DeleteProject)
+  handleOpenModal(project, type){
+    this.toggle(type)
     this.setState({selectedProject: project})
   }
 
@@ -62,7 +63,7 @@ class Project extends React.Component {
     })
   }
 
-  async componentDidMount(){
+  componentDidMount(){
     this.props.fetchProjects()
   }
 
@@ -72,8 +73,8 @@ class Project extends React.Component {
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
           <td><Link to={`/projects/${ project.id }`}>{ project.name }</Link></td>
-          <td onClick={this.toggle.bind(this, ACTION_TYPE.EditProject)}>Edit</td>
-          <td onClick={this.handleOpenDeleteModal.bind(this, project)}>Delete</td>
+          <td onClick={this.handleOpenModal.bind(this, project, ACTION_TYPE.EditProject)}>Edit</td>
+          <td onClick={this.handleOpenModal.bind(this, project, ACTION_TYPE.DeleteProject)}>Delete</td>
         </tr>
       )
     })
@@ -114,6 +115,10 @@ class Project extends React.Component {
             toggle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
             modalTitle="Edit project"
             isOpen={this.state.isOpenEditProjectModal}>
+            <FormProject
+              initialValues={this.state.selectedProject}
+              onSubmit={this.handleEdit}
+            />
           </CommonModal>
         }
         {this.state.isOpenDeleteProjectModal &&
@@ -143,6 +148,7 @@ const mapDispatchToProps = {
   fetchProjects,
   deleteProject,
   addNewProject,
+  updateProjectInformations,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project);
