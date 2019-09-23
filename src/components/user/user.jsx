@@ -108,7 +108,14 @@ class User extends React.Component {
             handleCancle={this.toggle.bind(this, ACTION_TYPE.AddUser)}
             isOpen={this.state.isOpenAddUserModal}>
             <FormUser
-              initialValues={{name: ''}}
+              initialValues={{
+                "email": "tamlh1",
+                "age": 11,
+                "gender": "male",
+                "position": "developer",
+                "project_ids": []
+              }}
+              projects={this.props.projects}
               onSubmit={this.handleAddNew}
               submitText='Save'
             />
@@ -148,7 +155,8 @@ class User extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  users: state.users
+  users: state.users,
+  projects: state.projects.items
 })
 
 const mapDispatchToProps = {

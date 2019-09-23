@@ -15,7 +15,7 @@ class CommonTableDetails extends React.Component {
   }
 
   tableBody(object) {
-    const renderTableData = Object.values(object).map((value, index) => <td key={`${index}_${value}`}> { value }</td>)
+    const renderTableData = Object.values(object).map((value, index) => <td key={`${index}_${value}`}> { value.toString() }</td>)
     return(
       <tbody>
           <tr>{ renderTableData }</tr>
