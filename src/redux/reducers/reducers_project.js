@@ -32,7 +32,7 @@ const projects = (state = initialState, action) => {
         })
       }
     default:
-    return initialState
+      return state
   }
 }
 
