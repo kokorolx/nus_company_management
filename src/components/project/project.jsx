@@ -31,7 +31,7 @@ class Project extends React.Component {
   }
 
   componentDidMount(){
-    this.props.fetchProjects()
+    this.props.fetchProjects();
   }
   handleAddNew(project){
     this.props.addNewProject(project)

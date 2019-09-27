@@ -5,6 +5,7 @@ import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 import CommonModal from '../common/modal'
 import FormUser from './_form_user.jsx'
+import { fetchProjects } from '../../redux/actions/actions_project.js'
 
 const ACTION_TYPE = {
   AddUser: 'AddUser',
@@ -16,7 +17,6 @@ class User extends React.Component {
 
   constructor(props){
     super(props);
-
     this.state = {
       users: [],
       selectedUser: null,
@@ -28,10 +28,12 @@ class User extends React.Component {
     this.handleAddNew = this.handleAddNew.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
+    this.getKey = this.getKey.bind(this);
   }
 
   componentDidMount(){
-    this.props.fetchUsers()
+    this.props.fetchProjects();
+    this.props.fetchUsers();
   }
   handleAddNew(user){
     this.props.addNewUser(user)
@@ -109,8 +111,8 @@ class User extends React.Component {
             isOpen={this.state.isOpenAddUserModal}>
             <FormUser
               initialValues={{
-                "email": "tamlh1",
-                "age": 11,
+                "email": "",
+                "age": 0,
                 "gender": "male",
                 "position": "developer",
                 "project_ids": []
@@ -163,6 +165,7 @@ const mapDispatchToProps = {
   fetchUsers,
   deleteUser,
   addNewUser,
+  fetchProjects,
   updateUserInformations,
 }
 
