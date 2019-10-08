@@ -11,8 +11,10 @@ class FormUser extends React.Component {
       <Formik
         initialValues={this.props.initialValues}
         onSubmit={(values, actions) => {
-
-          let customValues = {...values, project_ids: values.project_ids.map(item => item.id)}
+          let customValues = values
+          if(customValues.project_ids){
+            customValues = {...values, project_ids: values.project_ids.map(item => item.id)}
+          }
           setTimeout(() => {
             this.props.onSubmit(customValues);
             actions.setSubmitting(false);
@@ -51,6 +53,8 @@ class ProjectSelect extends React.Component {
 
   render() {
     const customOptions = this.props.options.map(item => ({id: item.id, label: item.name}))
+    // const customDefaultValues = this.props.defaultValue.map(item => ({id: item.id, label: item.name}))
+    console.log(this.props.value)
     return (
       <div style={{ margin: '1rem 0' }}>
         <label htmlFor="project">Projects</label>

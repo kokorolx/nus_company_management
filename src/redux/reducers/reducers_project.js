@@ -1,6 +1,6 @@
 import { PROJECT_ACTIONS } from '../actions/actions_project.js'
 
-const initialState = { items: [{company_id: null, id: null, name: null, users: []}], currentProject: {} }
+const initialState = { items: [], currentProject: {} }
 
 const projects = (state = initialState, action) => {
   switch (action.type) {

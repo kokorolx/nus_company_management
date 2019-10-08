@@ -23,6 +23,7 @@ class Project extends React.Component {
       isOpenAddProjectModal: false,
       isOpenEditProjectModal: false,
       isOpenDeleteProjectModal: false,
+      loading: true,
     }
 
     this.handleAddNew = this.handleAddNew.bind(this);
@@ -32,6 +33,7 @@ class Project extends React.Component {
 
   componentDidMount(){
     this.props.fetchProjects();
+    this.setState({ loading: false })
   }
   handleAddNew(project){
     this.props.addNewProject(project)
@@ -68,6 +70,8 @@ class Project extends React.Component {
         <tr key={project.id}>
           <th scope="row">{index + 1}</th>
           <td><Link to={`/projects/${ project.id }`}>{ project.name }</Link></td>
+          <td>{ project.company_id }</td>
+          <td key={ project.users }> { project.users && project.users.map(user => <Link to={`/users/${ user.id }`}><p>{ user.email }</p></Link>) } </td>
           <td onClick={this.handleOpenModal.bind(this, project, ACTION_TYPE.EditProject)}>Edit</td>
           <td onClick={this.handleOpenModal.bind(this, project, ACTION_TYPE.DeleteProject)}>Delete</td>
         </tr>
@@ -77,67 +81,73 @@ class Project extends React.Component {
 
   render() {
     const projects = this.props.projects.items
+    let renderTableHeader = <td></td>
+    if(projects.length) {
+      renderTableHeader = Object.keys(projects[0]).map(header => <th key={ header }>{ header }</th>)
+    }
     return(
       <Fragment>
-        <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddProject)}> Add new projects</Button>
-        <Table hover striped>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Project Name</th>
-              <th scope="col" colSpan='2'>Handle</th>
-            </tr>
-          </thead>
-          { !!projects.length &&
-            <tbody>
-              { this.projectRow(projects) }
-            </tbody>
-          }
-        </Table>
-        { !projects.length && <div className="text-center"> Please add new project </div> }
+        { this.state.loading ? <div> Loading... </div>
+          :
+            <Fragment>
+            <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddProject)}> Add new projects</Button>
+                <Table hover striped>
+                  <thead>
+                    { renderTableHeader }
+                    <th scope="col" colSpan='2'>Handle</th>
+                  </thead>
+                  { !!projects.length &&
+                    <tbody>
+                      { this.projectRow(projects) }
+                    </tbody>
+                  }
+                </Table>
+                { !projects.length && <div className="text-center"> Please add new project </div> }
 
-        {this.state.isOpenAddProjectModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
-            modalTitle="Create new project"
-            activeFotterModal={true}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
-            isOpen={this.state.isOpenAddProjectModal}>
-            <FormProject
-              initialValues={{name: ''}}
-              onSubmit={this.handleAddNew}
-              submitText='Save'
-            />
-          </CommonModal>
-        }
-        {this.state.isOpenEditProjectModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
-            modalTitle="Edit project"
-            activeFotterModal={true}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
-            isOpen={this.state.isOpenEditProjectModal}>
-            <FormProject
-              initialValues={this.state.selectedProject}
-              onSubmit={this.handleEdit}
-              submitText='Save'
-            />
-          </CommonModal>
-        }
-        {this.state.isOpenDeleteProjectModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
-            modalTitle='Delete project'
-            activeFotterModal={true}
-            confirmText='Delete'
-            handleConfirm={this.confirmDelete}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
-            isOpen={this.state.isOpenDeleteProjectModal}>
-            <div>
-              Delete <b>{this.state.selectedProject.name} </b> project?
-            </div>
-          </CommonModal>
-        }
+                {this.state.isOpenAddProjectModal &&
+                  <CommonModal
+                    toggle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
+                    modalTitle="Create new project"
+                    activeFotterModal={true}
+                    handleCancle={this.toggle.bind(this, ACTION_TYPE.AddProject)}
+                    isOpen={this.state.isOpenAddProjectModal}>
+                    <FormProject
+                      initialValues={{name: ''}}
+                      onSubmit={this.handleAddNew}
+                      submitText='Save'
+                    />
+                  </CommonModal>
+                }
+                {this.state.isOpenEditProjectModal &&
+                  <CommonModal
+                    toggle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
+                    modalTitle="Edit project"
+                    activeFotterModal={true}
+                    handleCancle={this.toggle.bind(this, ACTION_TYPE.EditProject)}
+                    isOpen={this.state.isOpenEditProjectModal}>
+                    <FormProject
+                      initialValues={this.state.selectedProject}
+                      onSubmit={this.handleEdit}
+                      submitText='Save'
+                    />
+                  </CommonModal>
+                }
+                {this.state.isOpenDeleteProjectModal &&
+                  <CommonModal
+                    toggle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
+                    modalTitle='Delete project'
+                    activeFotterModal={true}
+                    confirmText='Delete'
+                    handleConfirm={this.confirmDelete}
+                    handleCancle={this.toggle.bind(this, ACTION_TYPE.DeleteProject)}
+                    isOpen={this.state.isOpenDeleteProjectModal}>
+                    <div>
+                      Delete <b>{this.state.selectedProject.name} </b> project?
+                    </div>
+                  </CommonModal>
+                }
+                </Fragment>
+              }
       </Fragment>
     )
   }

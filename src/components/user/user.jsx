@@ -23,17 +23,18 @@ class User extends React.Component {
       isOpenAddUserModal: false,
       isOpenEditUserModal: false,
       isOpenDeleteUserModal: false,
+      loading: true,
     }
 
     this.handleAddNew = this.handleAddNew.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
-    this.getKey = this.getKey.bind(this);
   }
 
   componentDidMount(){
     this.props.fetchProjects();
     this.props.fetchUsers();
+    this.setState({ loading: false })
   }
   handleAddNew(user){
     this.props.addNewUser(user)
@@ -67,9 +68,15 @@ class User extends React.Component {
   userRow(users) {
     return users.map((user, index) => {
       return (
-        <tr key={user.id}>
+        <tr key={ user.id }>
           <td>{ index + 1 }</td>
-          { Object.values(user).map(value => <td>{value.toString()}</td>) }
+          <td>{ user.id }</td>
+          <td>{ user.email }</td>
+          <td>{ user.age }</td>
+          <td>{ user.gender }</td>
+          <td>{ user.position }</td>
+          <td>{ user.company_id }</td>
+          <td>{ user.projects.map(project => <Link to={`/projects/${ project.id }`}><p>{ project.name }</p></Link>) }</td>
           <td onClick={this.handleOpenModal.bind(this, user, ACTION_TYPE.EditUser)}>Edit</td>
           <td onClick={this.handleOpenModal.bind(this, user, ACTION_TYPE.DeleteUser)}>Delete</td>
         </tr>
@@ -79,78 +86,87 @@ class User extends React.Component {
 
   render() {
     const users = this.props.users.items
+    const loading = this.state.loading
     let renderTableHeader = <td></td>
     if(users.length) {
       renderTableHeader = Object.keys(users[0]).map(header => <th key={header}>{ header }</th>)
     }
     return(
       <Fragment>
-        <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddUser)}> Add new users</Button>
-        <Table hover striped>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              { renderTableHeader }
-              <th scope="col" colSpan='2'>Handle</th>
-            </tr>
-          </thead>
-          { !!users.length &&
-            <tbody>
-              { this.userRow(users) }
-            </tbody>
-          }
-        </Table>
-        { !users.length && <div className="text-center"> Please add new user </div> }
+      { loading ?
+          <div>Loading...</div>
+        :
+        <Fragment>
+            <Button onClick={this.toggle.bind(this, ACTION_TYPE.AddUser)}> Add new users</Button>
+            <Table hover striped>
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  { renderTableHeader }
+                  <th scope="col" colSpan='2'>Handle</th>
+                </tr>
+              </thead>
+              { !!users.length &&
+                <tbody>
+                  { this.userRow(users) }
+                </tbody>
+              }
+            </Table>
+            { !users.length && <div className="text-center"> Please add new user </div> }
 
-        {this.state.isOpenAddUserModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.AddUser)}
-            modalTitle="Create new user"
-            activeFotterModal={true}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.AddUser)}
-            isOpen={this.state.isOpenAddUserModal}>
-            <FormUser
-              initialValues={{
-                "email": "",
-                "age": 0,
-                "gender": "male",
-                "position": "developer",
-                "project_ids": []
-              }}
-              projects={this.props.projects}
-              onSubmit={this.handleAddNew}
-              submitText='Save'
-            />
-          </CommonModal>
-        }
-        {this.state.isOpenEditUserModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.EditUser)}
-            modalTitle="Edit user"
-            activeFotterModal={true}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.EditUser)}
-            isOpen={this.state.isOpenEditUserModal}>
-            <FormUser
-              initialValues={this.state.selectedUser}
-              onSubmit={this.handleEdit}
-              submitText='Save'
-            />
-          </CommonModal>
-        }
-        {this.state.isOpenDeleteUserModal &&
-          <CommonModal
-            toggle={this.toggle.bind(this, ACTION_TYPE.DeleteUser)}
-            modalTitle='Delete user'
-            activeFotterModal={true}
-            confirmText='Delete'
-            handleConfirm={this.confirmDelete}
-            handleCancle={this.toggle.bind(this, ACTION_TYPE.DeleteUser)}
-            isOpen={this.state.isOpenDeleteUserModal}>
-            <div>
-              Delete <b>{this.state.selectedUser.name} </b> user?
-            </div>
-          </CommonModal>
-        }
+            {this.state.isOpenAddUserModal &&
+              <CommonModal
+                toggle={this.toggle.bind(this, ACTION_TYPE.AddUser)}
+                modalTitle="Create new user"
+                activeFotterModal={true}
+                handleCancle={this.toggle.bind(this, ACTION_TYPE.AddUser)}
+                isOpen={this.state.isOpenAddUserModal}>
+                <FormUser
+                  initialValues={{
+                    "email": "",
+                    "age": 0,
+                    "gender": "male",
+                    "position": "developer",
+                    "project_ids": []
+                  }}
+                  projects={this.props.projects}
+                  onSubmit={this.handleAddNew}
+                  submitText='Save'
+                />
+              </CommonModal>
+            }
+            {this.state.isOpenEditUserModal &&
+              <CommonModal
+                toggle={this.toggle.bind(this, ACTION_TYPE.EditUser)}
+                modalTitle="Edit user"
+                activeFotterModal={true}
+                handleCancle={this.toggle.bind(this, ACTION_TYPE.EditUser)}
+                isOpen={this.state.isOpenEditUserModal}>
+                <FormUser
+                  initialValues={this.state.selectedUser}
+                  projects={this.props.projects}
+                  onSubmit={this.handleEdit}
+                  submitText='Save'
+                />
+
+              </CommonModal>
+            }
+            { this.state.isOpenDeleteUserModal &&
+              <CommonModal
+                toggle={this.toggle.bind(this, ACTION_TYPE.DeleteUser)}
+                modalTitle='Delete user'
+                activeFotterModal={true}
+                confirmText='Delete'
+                handleConfirm={this.confirmDelete}
+                handleCancle={this.toggle.bind(this, ACTION_TYPE.DeleteUser)}
+                isOpen={this.state.isOpenDeleteUserModal}>
+                <div>
+                  Delete <b>{this.state.selectedUser.name} </b> user?
+                </div>
+              </CommonModal>
+            }
+        </Fragment>
+          }
       </Fragment>
     )
   }

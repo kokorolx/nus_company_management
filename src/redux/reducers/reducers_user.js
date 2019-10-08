@@ -1,22 +1,7 @@
 import { USER_ACTIONS } from '../actions/actions_user.js'
 
 const initialState = {
-  items: [{
-    "id": 0,
-    "company_id": 0,
-    "email": "giaunv@nustechnology.com",
-    "age": 0,
-    "gender": "male",
-    "position": "developer",
-    "projects": [
-      {
-        "id": 0,
-        "name": "Tiki",
-        "company_id": 0
-      }
-    ]
-  }
-  ], currentUser: {} }
+  items: [], currentUser: {} }
 
 const users = (state = initialState, action) => {
   switch (action.type) {

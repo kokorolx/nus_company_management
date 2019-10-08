@@ -7,6 +7,7 @@ import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 
 import Project from './components/project/project';
 import User from './components/user/user';
+import UserDetails from './components/user/user_details';
 import ProjectDetails from './components/project/project_details';
 
 import store from './redux/store.js';
@@ -16,23 +17,25 @@ import 'bootstrap/dist/css/bootstrap.css';
 const routing = (
   <Provider store={store}>
     <Router>
-
       <div className="container">
-        <ul className="nav nav-inline">
-          <li className="pl-1">
-            <Link to="/">Home</Link>
+      <nav class="navbar navbar-expand-sm bg-light">
+        <ul className="navbar-nav">
+          <li className="nav-item">
+            <Link className='nav-link' to="/">Home</Link>
           </li>
-          <li className="pl-1">
-            <Link to="/projects">Project</Link>
+          <li className="nav-item">
+            <Link className='nav-link' to="/projects">Project</Link>
           </li>
-          <li className="pl-1">
-            <Link to="/users">User</Link>
+          <li className="nav-item">
+            <Link className='nav-link' to="/users">User</Link>
           </li>
         </ul>
+        </nav>
 
         <Route exact path="/" component={App}></Route>
         <Route exact path="/projects" component={Project}></Route>
         <Route exact path="/users" component={User}></Route>
+        <Route exact path="/users/:id" component={UserDetails}></Route>
         <Route exact path="/projects/:id" component={ProjectDetails}></Route>
       </div>
     </Router>
