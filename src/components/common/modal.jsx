@@ -3,7 +3,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class CommonModal extends React.Component {
   render(){
-    console.log(this.props.isOpen)
     return(
       <Modal isOpen={this.props.isOpen} className={this.props.className}>
         <ModalHeader onClick={this.props.toggle}>{this.props.modalTitle || 'Modal title'}</ModalHeader>

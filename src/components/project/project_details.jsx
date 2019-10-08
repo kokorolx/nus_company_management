@@ -8,6 +8,7 @@ class ProjectDetails extends React.Component {
   componentDidMount(){
     const { id } = this.props.match.params
     this.props.fetchProject(id)
+    this.setState({ loading: false })
   }
 
   tableHeader(project) {
@@ -34,7 +35,6 @@ class ProjectDetails extends React.Component {
 
   render() {
     const currentProject = this.props.currentProject
-    console.log(currentProject)
     return (
       <div className='wrapper project_details'>
         <Table hover striped>
