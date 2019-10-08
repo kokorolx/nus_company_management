@@ -16,8 +16,10 @@ class FormProject extends React.Component {
         }}
         render={(props: FormikProps<Values>) => (
           <form onSubmit={props.handleSubmit}>
-            <Field type="text" name="name" placeholder="Name" />
-            <button type="submit">{this.props.submitText}</button>
+            <div className="form-group">
+              <Field className='form-control' type="text" name="name" placeholder="Name" />
+              <button className="btn btn-primary"type="submit">{this.props.submitText}</button>
+            </div>
           </form>
         )}
       />

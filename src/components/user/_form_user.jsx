@@ -22,17 +22,19 @@ class FormUser extends React.Component {
         }}
         render={(props) => (
           <form onSubmit={props.handleSubmit}>
-            <Field type="text" name="email" placeholder="email" required />
-            <Field type="number" name="age" placeholder="age" min={1}/>
-            <Field type="text" name="gender" placeholder="gender" />
-            <Field type="text" name="position" placeholder="position" />
-            <ProjectSelect
-              value={props.values.project_ids}
-              onChange={props.setFieldValue}
-              onBlur={props.setFieldTouched}
-              options={this.props.projects}
-            />
-            <button type="submit">{this.props.submitText}</button>
+            <div className="form-group">
+              <Field className='form-control' type="text" name="email" placeholder="email" required />
+              <Field className='form-control' type="number" name="age" placeholder="age" min={1}/>
+              <Field className='form-control' type="text" name="gender" placeholder="gender" />
+              <Field className='form-control' type="text" name="position" placeholder="position" />
+              <ProjectSelect
+                value={props.values.project_ids}
+                onChange={props.setFieldValue}
+                onBlur={props.setFieldTouched}
+                options={this.props.projects}
+              />
+              <button className='btn btn-primary' type="submit">{this.props.submitText}</button>
+              </div>
           </form>
         )}
       />
